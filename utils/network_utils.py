@@ -5,8 +5,39 @@ import os
 
 
 def get_network_adapters_status():
+    """
+    Retrieves the current network adapters' status, including their admin
+    ... state, connection state, type, and interface name.
+
+    The function runs the 'netsh interface show interface' command and parses
+    ... the output into a list  of dictionaries whereeach dictionary contains
+    ... details of a network adapter.
+
+    Example output from the command:
+    Admin State    State          Type             Interface Name
+    -------------------------------------------------------------------------
+    Enabled        Connected      Dedicated        Wi-Fi
+    Enabled        Connected      Dedicated        Ethernet
+
+    The parsed output returned by the function:
+    [
+        {
+            'admin_state': 'Enabled',
+            'state': 'Connected',
+            'type': 'Dedicated',
+            'interface_name': 'Wi-Fi'
+        },
+        {
+            'admin_state': 'Enabled',
+            'state': 'Connected',
+            'type': 'Dedicated',
+            'interface_name': 'Ethernet'
+        }
+    ]
+    """
     try:
-        result = subprocess.run(['netsh', 'interface', 'show', 'interface'], capture_output=True, text=True, encoding='utf-8')
+        command_args = ['netsh', 'interface', 'show', 'interface']
+        result = subprocess.run(command_args, capture_output=True, text=True, encoding='utf-8')
         output = result.stdout
         lines = output.split('\n')
 
@@ -25,14 +56,11 @@ def get_network_adapters_status():
                 if len(parts) == 4:
                     adapter = dict(zip(keys, parts))
                     adapters.append(adapter)
-
-        # [{'admin_state': 'Enabled', 'state': 'Connected', 'type': 'Dedicated', 'interface_name': 'Wi-Fi'},
-        # {'admin_state': 'Enabled', 'state': 'Connected', 'type': 'Dedicated', 'interface_name': 'Ethernet'}]
-
         return adapters
     except Exception as e:
         print(f"Error: {e}")
         return []
+
 def get_network_status(host='8.8.8.8', attempts=1):
     """
     Checks network connectivity to a specified host.
