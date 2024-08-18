@@ -123,8 +123,28 @@ def enable_internet(adapter_name):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+def get_network_info_from_ifconfig_me():
+    """
+    Fetches the network information from 'https://ifconfig.me/all.json'.
+    
+    The data includes the IP address, remote host, user agent, port, language, request method, 
+    encoding, MIME types, and other connection-related information.
+
+    :return: Dictionary containing network information such as IP address, user agent, port, etc.
+    :rtype: dict
+    """
+    url = "https://ifconfig.me/all.json"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error fetching network info: {e}")
+        return {}
+
 if __name__ == "__main__":
     print(get_local_ip())
     print(get_public_ip())
     print(get_network_adapters_status())
     print(get_network_status())
+    print(get_network_info_from_ifconfig_me())
