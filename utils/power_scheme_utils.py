@@ -11,7 +11,7 @@ def get_power_schemes():
 
     # get the active power scheme
     result = subprocess.run(commands['list'], capture_output=True, text=True)
-    lines = result.stdout.split('\n')
+    lines = result.stdout.splitlines()
 
     active_scheme = None
     power_schemes = []
