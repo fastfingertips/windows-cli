@@ -1,8 +1,9 @@
 import curses
 from layout import display_layout
+from utils.curses_utils import get_screen_size
 from utils.power_scheme_utils import(
   get_power_schemes,
-  switch_power_scheme
+  switch_power_scheme,
 )
 
 
@@ -10,21 +11,22 @@ def display_power_management_menu(stdscr):
     stdscr.clear()
     curses.curs_set(0)
     stdscr.nodelay(True)
-    stdscr.timeout(500)
+    stdscr.timeout(-1)
 
     selected_idx = 0
 
     while True:
         stdscr.clear()
         layout = display_layout(stdscr)
-        height, width = stdscr.getmaxyx()
-        center_y = height // 2
-        center_x = width // 2
+        screen = get_screen_size(stdscr)
+
+        screen_center_y = screen['center_y']
+        screen_center_x = screen['center_x']
 
         active_scheme, power_schemes = get_power_schemes()
 
-        display_active_scheme(stdscr, active_scheme, center_y, center_x)
-        display_power_schemes(stdscr, power_schemes, selected_idx, center_y, center_x)
+        display_active_scheme(stdscr, active_scheme, screen_center_y, screen_center_x)
+        display_power_schemes(stdscr, power_schemes, selected_idx, screen_center_y, screen_center_x)
 
         key = stdscr.getch()
 
