@@ -31,6 +31,9 @@ def draw_text(stdscr, /, x, y, text, *args, **kwargs):
     stdscr.addstr(y, x, text, *args, **kwargs)
     return {"start":x, "end":x+len(text), "pos":y}
 
+def draw_page_location(stdscr, header_y_pos, current_page: str):
+    stdscr.addstr(header_y_pos + 1, 0, current_page)
+
 def display_horizontal_line(stdscr, y_pos, screen_width):
     stdscr.hline(y_pos, 0, curses.ACS_HLINE, screen_width)
 
