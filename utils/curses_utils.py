@@ -1,6 +1,7 @@
 import curses
 import time
 
+
 def show_info(stdscr, message, title="Info", display_time=2):
     """
     display an informational window for a specified amount of time.
@@ -27,12 +28,16 @@ def show_info(stdscr, message, title="Info", display_time=2):
     info_win.clear()
     stdscr.refresh()
 
-def draw_text(stdscr, /, y, x, text, *args, **kwargs):
+def draw_text(stdscr, /, y, x, text, *args, **kwargs):    
     stdscr.addstr(y, x, text, *args, **kwargs)
     return {"start":x, "end":x+len(text), "pos":y}
 
 def draw_page_location(stdscr, header_y_pos, current_page: str):
     stdscr.addstr(header_y_pos + 1, 0, current_page)
+
+def draw_page_keys(stdscr, footer_y_pos, key_infos: list):
+    for i, key_info in enumerate(key_infos):
+        stdscr.addstr(footer_y_pos - len(key_infos) + i - 1, 0, key_info)
 
 def display_horizontal_line(stdscr, y_pos, screen_width):
     stdscr.hline(y_pos, 0, curses.ACS_HLINE, screen_width)
