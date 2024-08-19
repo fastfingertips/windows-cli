@@ -45,8 +45,8 @@ def display_main_menu(stdscr):
         menu_height = len(menu_options) + 2
         menu_width = max(len(label) for label, _ in menu_options) + 2
 
-        menu_x_start = (screen['x'] - menu_width) // 2
-        menu_y_start = (screen['y'] - menu_height) // 2
+        menu_x_start = (screen_x - menu_width) // 2
+        menu_y_start = (screen_y - menu_height) // 2
         tools_y_start = menu_y_start + 1
        
         for menu_no, (menu_name, menu_function) in enumerate(menu_options):
