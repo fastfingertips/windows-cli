@@ -48,8 +48,8 @@ def display_header(stdscr, text=""):
     if text:
         draw_text(
             stdscr,
-            text_x_start,
             text_y_pos,
+            text_x_start,
             text,
             curses.A_BOLD | curses.A_UNDERLINE
         )
@@ -74,8 +74,8 @@ def display_footer(stdscr, text=""):
     if text:
         draw_text(
             stdscr,
-            text_x_start,
             text_y_pos,
+            text_x_start,
             text,
             curses.A_BOLD | curses.A_UNDERLINE
         )

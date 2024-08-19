@@ -27,7 +27,7 @@ def show_info(stdscr, message, title="Info", display_time=2):
     info_win.clear()
     stdscr.refresh()
 
-def draw_text(stdscr, /, x, y, text, *args, **kwargs):
+def draw_text(stdscr, /, y, x, text, *args, **kwargs):
     stdscr.addstr(y, x, text, *args, **kwargs)
     return {"start":x, "end":x+len(text), "pos":y}
 
