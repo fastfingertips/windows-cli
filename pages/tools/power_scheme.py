@@ -1,4 +1,5 @@
 import curses
+from layout import display_layout
 from utils.power_scheme_utils import(
   get_power_schemes,
   switch_power_scheme
@@ -14,13 +15,14 @@ def display_power_management_menu(stdscr):
     selected_idx = 0
 
     while True:
+        stdscr.clear()
+        layout = display_layout(stdscr)
         height, width = stdscr.getmaxyx()
         center_y = height // 2
         center_x = width // 2
 
         active_scheme, power_schemes = get_power_schemes()
 
-        stdscr.clear()
         display_active_scheme(stdscr, active_scheme, center_y, center_x)
         display_power_schemes(stdscr, power_schemes, selected_idx, center_y, center_x)
 
