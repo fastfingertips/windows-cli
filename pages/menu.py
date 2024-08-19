@@ -4,7 +4,7 @@ from pages.tools.system_time import display_system_time_menu
 from pages.tools.power_scheme import display_power_management_menu
 from pages.tools.network import display_network_menu
 from pages.tools.system_page import display_system_info_menu
-from utils.curses_utils import draw_page_location, get_screen_size
+from utils.curses_utils import draw_page_location, get_screen_size, draw_page_keys
 
 
 def display_main_menu(stdscr):
@@ -30,6 +30,7 @@ def display_main_menu(stdscr):
         # layout
         layout = display_layout(stdscr)
         header_y_pos = layout['header']
+        footer_y_pos = layout['footer']
 
         # screen
         screen = get_screen_size(stdscr)
@@ -37,6 +38,11 @@ def display_main_menu(stdscr):
         screen_x = screen['x']
 
         draw_page_location(stdscr, header_y_pos, "Main Menu")
+        draw_page_keys(stdscr, footer_y_pos, [
+            "'enter': Select",
+            "'q': Quit",
+            "Use arrow keys to navigate."
+        ])
 
         # calculate menu positioning
         menu_height = len(menu_options) + 2
