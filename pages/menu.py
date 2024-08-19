@@ -16,7 +16,7 @@ def display_main_menu(stdscr):
     stdscr.nodelay(True)
     stdscr.timeout(500)
 
-    selected_idx = 0
+    selected_tool_index = 0
     menu_options = [
         ("Power Management", display_power_management_menu),
         ("System Time", display_system_time_menu),
@@ -30,27 +30,24 @@ def display_main_menu(stdscr):
         # layout
         layout = display_layout(stdscr)
         header_y_pos = layout['header']
-        footer_y_pos = layout['footer']
 
         # screen
         screen = get_screen_size(stdscr)
         screen_y = screen['y']
         screen_x = screen['x']
-        screen_center_y = screen['center_y']
-        screen_center_x = screen['center_x']
 
         draw_page_location(stdscr, header_y_pos, "Main Menu")
 
         # calculate menu positioning
         menu_height = len(menu_options) + 2
-        menu_width = max(len(label) for label, _ in menu_options) + 2
+        menu_width = max(len(menu_name) for menu_name, menu_function in menu_options) + 2
 
         menu_x_start = (screen_x - menu_width) // 2
         menu_y_start = (screen_y - menu_height) // 2
         tools_y_start = menu_y_start + 1
        
         for menu_no, (menu_name, menu_function) in enumerate(menu_options):
-            menu_marker = ">>" if menu_no == selected_idx else "  "
+            menu_marker = ">>" if menu_no == selected_tool_index else "  "
             menu_text = f"{menu_marker} {menu_name}"
             stdscr.addstr(tools_y_start + menu_no, menu_x_start, menu_text)
 
@@ -59,11 +56,11 @@ def display_main_menu(stdscr):
         if key == ord('q'):
             break
         elif key == curses.KEY_UP:
-            selected_idx = (selected_idx - 1) % len(menu_options)
+            selected_tool_index = (selected_tool_index - 1) % len(menu_options)
         elif key == curses.KEY_DOWN:
-            selected_idx = (selected_idx + 1) % len(menu_options)
+            selected_tool_index = (selected_tool_index + 1) % len(menu_options)
         elif key == ord('\n'):
-            menu_name, menu_function = menu_options[selected_idx]
+            menu_name, menu_function = menu_options[selected_tool_index]
             stdscr.clear()
             menu_function(stdscr)
 
