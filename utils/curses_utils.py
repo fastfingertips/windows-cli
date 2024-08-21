@@ -59,9 +59,7 @@ def display_vertical_line(stdscr, x_pos, screen_height):
 def get_screen_size(stdscr):
     y, x = stdscr.getmaxyx()
     context = {
-        "y": y,
-        "x": x,
-        "center_y": y // 2,
-        "center_x": x // 2
+        "screen": (y, x),
+        "center": (y // 2, x // 2)
     }
     return context
