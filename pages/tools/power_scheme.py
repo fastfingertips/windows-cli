@@ -38,9 +38,7 @@ def display_power_management_menu(stdscr):
         elif key == curses.KEY_DOWN:
             selected_idx = (selected_idx + 1) % len(power_schemes)
         elif key == ord('\n'):
-            selected_scheme = power_schemes[selected_idx]
-            switch_power_scheme(selected_scheme['guid'])
-            stdscr.clear()
+            switch_power_scheme(guid=power_schemes[selected_idx]['guid'])
         elif key == ord('h'):
             break
 
@@ -67,4 +65,4 @@ def display_power_schemes(stdscr, power_schemes, selected_idx, center_y, center_
         text = f"{marker} {scheme['name']} (GUID: {scheme['guid']})"
         y = center_y + idx + 1
         x = center_x - len(text) // 2
-        stdscr.addstr(y, x, text)
+        stdscr.addstr(y, x, text, curses.A_REVERSE if idx == selected_idx else curses.A_NORMAL)
