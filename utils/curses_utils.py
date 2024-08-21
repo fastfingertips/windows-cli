@@ -48,7 +48,7 @@ def draw_page_location(stdscr, header_y_pos, current_page: str):
 
 def draw_page_keys(stdscr, footer_y_pos, key_infos: list):
     for i, key_info in enumerate(key_infos):
-        stdscr.addstr(footer_y_pos - len(key_infos) + i - 1, 0, key_info)
+        stdscr.addstr(footer_y_pos - len(key_infos) + i, 0, key_info)
 
 def display_horizontal_line(stdscr, x: int, screen: dict):
     sc_y, sc_x =  screen['screen']
