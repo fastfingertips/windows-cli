@@ -34,8 +34,7 @@ def display_main_menu(stdscr):
 
         # screen
         screen = get_screen_size(stdscr)
-        screen_y = screen['y']
-        screen_x = screen['x']
+        screen_y, screen_x = screen['screen']
 
         draw_page_location(stdscr, header_y_pos, "Main Menu")
         draw_page_keys(stdscr, footer_y_pos, [
