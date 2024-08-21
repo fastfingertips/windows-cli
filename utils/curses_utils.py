@@ -63,3 +63,12 @@ def get_screen_size(stdscr):
         "center": (y // 2, x // 2)
     }
     return context
+
+def get_centered_text_position(stdscr, text, screen=None):
+    """
+    Returns the x position of the text to be centered on the screen.
+    """
+    if not screen:
+        screen = get_screen_size(stdscr)
+
+    return (screen['screen'][1] - len(text)) // 2
