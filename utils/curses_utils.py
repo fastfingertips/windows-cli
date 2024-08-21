@@ -1,6 +1,17 @@
+from functools import wraps
 import curses
 import time
 
+
+def clear_screen(func):
+    """Decorator to clear the screen before calling the function and refresh after it."""
+    @wraps(func)
+    def wrapper(stdscr, *args, **kwargs):
+        stdscr.clear()
+        result = func(stdscr, *args, **kwargs)
+        stdscr.refresh()
+        return result
+    return wrapper
 
 def show_info(stdscr, message, title="Info", display_time=2):
     """
