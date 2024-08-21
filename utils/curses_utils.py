@@ -50,11 +50,13 @@ def draw_page_keys(stdscr, footer_y_pos, key_infos: list):
     for i, key_info in enumerate(key_infos):
         stdscr.addstr(footer_y_pos - len(key_infos) + i - 1, 0, key_info)
 
-def display_horizontal_line(stdscr, y_pos, screen_width):
-    stdscr.hline(y_pos, 0, curses.ACS_HLINE, screen_width)
+def display_horizontal_line(stdscr, x: int, screen: dict):
+    sc_y, sc_x =  screen['screen']
+    stdscr.hline(x, 0, curses.ACS_HLINE, sc_x - 1)
 
-def display_vertical_line(stdscr, x_pos, screen_height):
-    stdscr.vline(0, x_pos, curses.ACS_VLINE, screen_height)
+def display_vertical_line(stdscr, y: int, screen: dict):
+    sc_y, sc_x =  screen['screen']
+    stdscr.vline(0, y, curses.ACS_VLINE, sc_y)
 
 def get_screen_size(stdscr):
     y, x = stdscr.getmaxyx()
