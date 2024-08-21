@@ -1,11 +1,26 @@
 import curses
 from layout import display_layout
-from utils.curses_utils import get_screen_size, draw_page_location, clear_screen
+from utils.curses_utils import (
+    get_screen_size,
+    draw_page_location,
+    clear_screen
+)
 from utils.power_scheme_utils import(
   get_power_schemes,
-  switch_power_scheme,
+  switch_power_scheme
 )
 
+def handle_key_press(stdscr, selected_index, power_schemes):
+    key = stdscr.getch()
+    if key == ord('q'):
+        return 0, selected_index
+    elif key == curses.KEY_UP:
+        selected_index = (selected_index - 1) % len(power_schemes)
+    elif key == curses.KEY_DOWN:
+        selected_index = (selected_index + 1) % len(power_schemes)
+    elif key == ord('\n'):
+        switch_power_scheme(guid=power_schemes[selected_index]['guid'])
+    return 1, selected_index
 
 @clear_screen
 def display_power_management_menu(stdscr):
@@ -13,33 +28,23 @@ def display_power_management_menu(stdscr):
     stdscr.nodelay(True)
     stdscr.timeout(-1)
 
-    selected_idx = 0
+    selected_index = 0
 
     while True:
         layout = display_layout(stdscr)
         screen = get_screen_size(stdscr)
+        active_scheme, power_schemes = get_power_schemes()
 
         header_y_pos = layout['header']
-        screen_center_y = screen['center_y']
-        screen_center_x = screen['center_x']
-
-        active_scheme, power_schemes = get_power_schemes()
+        screen_center_y, screen_center_x = screen['center']        
 
         draw_page_location(stdscr, header_y_pos, "Power Schemes")
         display_active_scheme(stdscr, active_scheme, screen_center_y, screen_center_x)
-        display_power_schemes(stdscr, power_schemes, selected_idx, screen_center_y, screen_center_x)
+        display_power_schemes(stdscr, power_schemes, selected_index, screen_center_y, screen_center_x)
 
-        key = stdscr.getch()
+        action, selected_index = handle_key_press(stdscr, selected_index, power_schemes)
 
-        if key == ord('q'):
-            break
-        elif key == curses.KEY_UP:
-            selected_idx = (selected_idx - 1) % len(power_schemes)
-        elif key == curses.KEY_DOWN:
-            selected_idx = (selected_idx + 1) % len(power_schemes)
-        elif key == ord('\n'):
-            switch_power_scheme(guid=power_schemes[selected_idx]['guid'])
-        elif key == ord('h'):
+        if not action:
             break
 
 def display_active_scheme(stdscr, active_scheme, center_y, center_x):
@@ -54,15 +59,15 @@ def display_active_scheme(stdscr, active_scheme, center_y, center_x):
     x = center_x - len(text) // 2
     stdscr.addstr(y, x, text, curses.A_BOLD)
 
-def display_power_schemes(stdscr, power_schemes, selected_idx, center_y, center_x):
+def display_power_schemes(stdscr, power_schemes, selected_index, center_y, center_x):
     """
     Lists available power schemes centered on the screen.
     """
     stdscr.addstr(center_y, center_x - len("Other Power Plans:") // 2, "Other Power Plans:")
 
     for idx, scheme in enumerate(power_schemes):
-        marker = ">>" if idx == selected_idx else "  "
+        marker = ">>" if idx == selected_index else "  "
         text = f"{marker} {scheme['name']} (GUID: {scheme['guid']})"
         y = center_y + idx + 1
         x = center_x - len(text) // 2
-        stdscr.addstr(y, x, text, curses.A_REVERSE if idx == selected_idx else curses.A_NORMAL)
+        stdscr.addstr(y, x, text, curses.A_REVERSE if idx == selected_index else curses.A_NORMAL)
