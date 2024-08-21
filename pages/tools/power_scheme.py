@@ -1,14 +1,14 @@
 import curses
 from layout import display_layout
-from utils.curses_utils import get_screen_size
+from utils.curses_utils import get_screen_size, draw_page_location, clear_screen
 from utils.power_scheme_utils import(
   get_power_schemes,
   switch_power_scheme,
 )
 
 
+@clear_screen
 def display_power_management_menu(stdscr):
-    stdscr.clear()
     curses.curs_set(0)
     stdscr.nodelay(True)
     stdscr.timeout(-1)
@@ -16,15 +16,16 @@ def display_power_management_menu(stdscr):
     selected_idx = 0
 
     while True:
-        stdscr.clear()
         layout = display_layout(stdscr)
         screen = get_screen_size(stdscr)
 
+        header_y_pos = layout['header']
         screen_center_y = screen['center_y']
         screen_center_x = screen['center_x']
 
         active_scheme, power_schemes = get_power_schemes()
 
+        draw_page_location(stdscr, header_y_pos, "Power Schemes")
         display_active_scheme(stdscr, active_scheme, screen_center_y, screen_center_x)
         display_power_schemes(stdscr, power_schemes, selected_idx, screen_center_y, screen_center_x)
 
@@ -42,8 +43,6 @@ def display_power_management_menu(stdscr):
             stdscr.clear()
         elif key == ord('h'):
             break
-
-        stdscr.refresh()
 
 def display_active_scheme(stdscr, active_scheme, center_y, center_x):
     """
