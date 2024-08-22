@@ -1,7 +1,7 @@
 import curses
 import platform
 from utils.system_utils import get_cpu_usage, get_memory_usage
-
+from utils.curses_utils import draw_text
 
 def get_system_info():
     """
@@ -44,28 +44,15 @@ def display_system_info_menu(stdscr):
     stdscr.nodelay(False)
     stdscr.timeout(1000)
 
-    max_y, max_x = stdscr.getmaxyx()
-
     while True:
-        stdscr.clear()
-        stdscr.addstr(0, 0, "System Information")
-
         system_info = get_system_info()
-        print_system_info(stdscr, system_info)
 
-        # update display if window size changes
-        new_max_y, new_max_x = stdscr.getmaxyx()
-        if new_max_y != max_y or new_max_x != max_x:
-            max_y, max_x = new_max_y, new_max_x
-            stdscr.clear()
-            stdscr.addstr(0, 0, "System Information")
-            print_system_info(stdscr, system_info)
+        draw_text(stdscr, 0, 0, "System Information")
+        print_system_info(stdscr, system_info)
 
         key = stdscr.getch()
         if key == ord('q'):
-            break
-
-        stdscr.refresh()
+            break    
 
 if __name__ == "__main__":
     curses.wrapper(display_system_info_menu)
