@@ -1,7 +1,23 @@
 from functools import wraps
+
 import curses
 import time
+import os
 
+class ScreenSize:
+    def __init__(self, stdscr):
+        self.stdscr = stdscr
+        self.update_size()
+
+    def update_size(self):
+        """Update screen size attributes."""
+        self.y, self.x = self.stdscr.getmaxyx()
+        self.center_y = self.y // 2
+        self.center_x = self.x // 2
+
+    def refresh(self):
+        """Refresh the screen size if the terminal is resized."""
+        self.update_size()
 
 def clear_screen(func):
     """Decorator to clear the screen before calling the function and refresh after it."""
@@ -39,7 +55,7 @@ def show_info(stdscr, message, title="Info", display_time=2):
     info_win.clear()
     stdscr.refresh()
 
-def draw_text(stdscr, /, y, x, text, *args, **kwargs):    
+def draw_text(stdscr, /, y, x, text, *args, **kwargs):
     stdscr.addstr(y, x, text, *args, **kwargs)
     return {"start":x, "end":x+len(text), "pos":y}
 
@@ -50,27 +66,17 @@ def draw_page_keys(stdscr, footer_y_pos, key_infos: list):
     for i, key_info in enumerate(key_infos):
         stdscr.addstr(footer_y_pos - len(key_infos) + i, 0, key_info)
 
-def display_horizontal_line(stdscr, x: int, screen: dict):
-    sc_y, sc_x =  screen['screen']
-    stdscr.hline(x, 0, curses.ACS_HLINE, sc_x - 1)
+def display_horizontal_line(stdscr, line_pos: int, width):
+    stdscr.hline(line_pos, 0, curses.ACS_HLINE, width)
 
-def display_vertical_line(stdscr, y: int, screen: dict):
-    sc_y, sc_x =  screen['screen']
-    stdscr.vline(0, y, curses.ACS_VLINE, sc_y)
+def display_vertical_line(stdscr, line_pos: int, height):
+    stdscr.vline(0, line_pos, curses.ACS_VLINE, height)
 
-def get_screen_size(stdscr):
-    y, x = stdscr.getmaxyx()
-    context = {
-        "screen": (y, x),
-        "center": (y // 2, x // 2)
-    }
-    return context
-
-def get_centered_text_position(stdscr, text, screen=None):
+def get_centered_text_position(text, screen_size: ScreenSize):
     """
     Returns the x position of the text to be centered on the screen.
     """
-    if not screen:
-        screen = get_screen_size(stdscr)
-
-    return (screen['screen'][1] - len(text)) // 2
+    text_length = len(text)
+    centered_x = screen_size.center_x - (text_length // 2)
+    
+    return centered_x
