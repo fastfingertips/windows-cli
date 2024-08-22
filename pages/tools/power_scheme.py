@@ -1,7 +1,7 @@
 import curses
 from layout import display_layout
 from utils.curses_utils import (
-    get_screen_size,
+    ScreenSize,
     draw_page_location,
     clear_screen
 )
@@ -22,30 +22,30 @@ def handle_key_press(stdscr, selected_index, power_schemes):
         switch_power_scheme(guid=power_schemes[selected_index]['guid'])
     return 1, selected_index
 
-@clear_screen
 def display_power_management_menu(stdscr):
     curses.curs_set(0)
     stdscr.nodelay(True)
     stdscr.timeout(-1)
 
     selected_index = 0
+    screen_size = ScreenSize(stdscr)
 
     while True:
         layout = display_layout(stdscr)
-        screen = get_screen_size(stdscr)
         active_scheme, power_schemes = get_power_schemes()
 
-        header_y_pos = layout['header']
-        screen_center_y, screen_center_x = screen['center']        
+        header_y_pos = layout['header']        
 
         draw_page_location(stdscr, header_y_pos, "Power Schemes")
-        display_active_scheme(stdscr, active_scheme, screen_center_y, screen_center_x)
-        display_power_schemes(stdscr, power_schemes, selected_index, screen_center_y, screen_center_x)
+        display_active_scheme(stdscr, active_scheme, screen_size.center_y, screen_size.center_x)
+        display_power_schemes(stdscr, power_schemes, selected_index, screen_size.center_y, screen_size.center_x)
 
         action, selected_index = handle_key_press(stdscr, selected_index, power_schemes)
 
         if not action:
             break
+
+        screen_size.refresh()
 
 def display_active_scheme(stdscr, active_scheme, center_y, center_x):
     """
