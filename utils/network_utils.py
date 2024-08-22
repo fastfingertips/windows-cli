@@ -107,21 +107,15 @@ def disable_internet(adapter_name):
     """
     Disables internet connection on Windows.
     """
-    try:
-        os.system(f'netsh interface set interface "{adapter_name}" admin=disable')
-        print(f"{adapter_name} has been disabled.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    os.system(f'netsh interface set interface "{adapter_name}" admin=disable >nul 2>&1')
+    return is_disabled(adapter_name)
 
 def enable_internet(adapter_name):
     """
     Enables internet connection on Windows.
     """
-    try:
-        os.system(f'netsh interface set interface "{adapter_name}" admin=enable')
-        print(f"{adapter_name} has been enabled.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    os.system(f'netsh interface set interface "{adapter_name}" admin=enable >nul 2>&1')
+    return is_enabled(adapter_name)
 
 def get_network_info_from_ifconfig_me():
     """
@@ -141,6 +135,20 @@ def get_network_info_from_ifconfig_me():
     except requests.RequestException as e:
         print(f"Error fetching network info: {e}")
         return {}
+
+def is_enabled(adapter_name):
+    adapters = get_network_adapters_status()
+    for adapter in adapters:
+        if adapter['interface_name'] == adapter_name:
+            return adapter['admin_state'] == "Enabled"
+    return False
+
+def is_disabled(adapter_name):
+    adapters = get_network_adapters_status()
+    for adapter in adapters:
+        if adapter['interface_name'] == adapter_name:
+            return adapter['admin_state'] == "Disabled"
+    return False
 
 if __name__ == "__main__":
     print(get_local_ip())
