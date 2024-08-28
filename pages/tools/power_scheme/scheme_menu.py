@@ -2,8 +2,7 @@ import curses
 from layout import display_layout
 from utils.curses_utils import (
     ScreenSize,
-    draw_page_location,
-    clear_screen
+    draw_page_location
 )
 from utils.power_scheme_utils import(
   get_power_schemes,
