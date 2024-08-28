@@ -23,18 +23,26 @@ def print_system_info(stdscr, system_info):
     """
     Prints system information to the screen.
     """
-    if isinstance(system_info, dict):
-        stdscr.addstr(2, 0, f"System: {system_info.get('system', 'N/A')}")
-        stdscr.addstr(3, 0, f"Node Name: {system_info.get('node_name', 'N/A')}")
-        stdscr.addstr(4, 0, f"Release: {system_info.get('release', 'N/A')}")
-        stdscr.addstr(5, 0, f"Version: {system_info.get('version', 'N/A')}")
-        stdscr.addstr(6, 0, f"Machine: {system_info.get('machine', 'N/A')}")
-        stdscr.addstr(7, 0, f"Processor: {system_info.get('processor', 'N/A')}")
-        stdscr.addstr(8, 0, f"Architecture: {system_info.get('architecture', 'N/A')}")
-        stdscr.addstr(9, 0, f"CPU Usage: {system_info.get('cpu_usage', 'N/A')}%")
-        stdscr.addstr(10, 0, f"Memory Usage: {system_info.get('memory_usage', 'N/A')}%")
+    start_row = 2
+    error_message = "Error: System info not available"
+    
+    fields = [
+        ("System", system_info.get('system', 'N/A')),
+        ("Node Name", system_info.get('node_name', 'N/A')),
+        ("Release", system_info.get('release', 'N/A')),
+        ("Version", system_info.get('version', 'N/A')),
+        ("Machine", system_info.get('machine', 'N/A')),
+        ("Processor", system_info.get('processor', 'N/A')),
+        ("Architecture", system_info.get('architecture', 'N/A')),
+        ("CPU Usage", f"{system_info.get('cpu_usage', 'N/A')}%"),
+        ("Memory Usage", f"{system_info.get('memory_usage', 'N/A')}%")
+    ]
+
+    if isinstance(system_info, dict) and system_info:
+        for idx, (label, value) in enumerate(fields):
+            stdscr.addstr(start_row + idx, 0, f"{label:15}: {value}")
     else:
-        stdscr.addstr(2, 0, "Error: System info not available")
+        stdscr.addstr(start_row, 0, error_message)
 
 def display_system_info_menu(stdscr):
     """
