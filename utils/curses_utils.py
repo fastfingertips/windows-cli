@@ -19,6 +19,32 @@ class ScreenSize:
         """Refresh the screen size if the terminal is resized."""
         self.update_size()
 
+def get_user_input(stdscr, prompt="Input: ", start_row=2) -> str:
+    erase_char = curses.erasechar()
+    stdscr.clear()
+    stdscr.addstr(0, 0, prompt)
+    stdscr.refresh()
+    
+    input_buffer = []
+    
+    while True:
+        ch = stdscr.getch()
+        
+        if ch == curses.KEY_ENTER or ch == 10:
+            break
+        
+        if ch == erase_char[0]:
+            if input_buffer:
+                input_buffer.pop()
+                stdscr.addstr(start_row, 0, prompt + "".join(input_buffer) + " " * (len(input_buffer) + 1))
+        else:
+            input_buffer.append(chr(ch))
+            stdscr.addstr(start_row, 0, prompt + "".join(input_buffer))
+        
+        stdscr.refresh()
+    
+    return "".join(input_buffer)
+
 def getsyx() -> Tuple[int, int]:
     """
     Returns the current cursor position.
