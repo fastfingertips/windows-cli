@@ -37,11 +37,6 @@ def display_layout(stdscr):
         'footer': footer_y
     }
 
-    stdscr.refresh()
-
-def display_current_time():
-    pass
-
 def display_header(stdscr, screen_size: ScreenSize, line_pos:int = 1, text:str = "") -> int:
     """
     Displays a header text in the center at the specified y position.
@@ -53,12 +48,16 @@ def display_header(stdscr, screen_size: ScreenSize, line_pos:int = 1, text:str =
     )
 
     if text:
-        draw_text(
-            stdscr,
-            *text_pos,
-            text,
-            curses.A_BOLD | curses.A_UNDERLINE
-        )
+        try:
+            draw_text(
+                stdscr,
+                *text_pos,
+                text,
+                curses.A_BOLD | curses.A_UNDERLINE
+            )
+        except curses.error:
+            curses.endwin()
+            print("Error header:", curses.error)
 
     display_horizontal_line(stdscr, line_pos, screen_size.x)
     return line_pos
