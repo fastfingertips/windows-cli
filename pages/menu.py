@@ -1,9 +1,9 @@
 import curses
 from layout import display_layout
-from pages.tools.system_time import display_system_time_menu
-from pages.tools.power_scheme import display_power_management_menu
-from pages.tools.network import display_network_menu
-from pages.tools.system_page import display_system_info_menu
+from pages.tools.system.time_menu import display_system_time_menu
+from pages.tools.power_scheme.scheme_menu import display_power_management_menu
+from pages.tools.network.network_menu import display_network_menu
+from pages.tools.system.info_menu import display_system_info_menu
 from utils.curses_utils import (
   ScreenSize,
   draw_page_keys,
