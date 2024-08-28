@@ -1,8 +1,8 @@
 from functools import wraps
+from typing import Tuple
 
 import curses
 import time
-import os
 
 class ScreenSize:
     def __init__(self, stdscr):
@@ -18,6 +18,12 @@ class ScreenSize:
     def refresh(self):
         """Refresh the screen size if the terminal is resized."""
         self.update_size()
+
+def getsyx() -> Tuple[int, int]:
+    """
+    Returns the current cursor position.
+    """
+    return curses.getsyx()
 
 def clear_screen(func):
     """Decorator to clear the screen before calling the function and refresh after it."""
