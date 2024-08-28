@@ -2,10 +2,11 @@ import curses
 from utils.curses_utils import ScreenSize, get_centered_text_position
 from utils.system_time_utils import get_current_datetime
 
-def handle_key_press(stdscr, key):
+def handle_key_press(stdscr):
     key = stdscr.getch()
     if key == ord('q'):
         return 0
+    return key
 
 def display_system_time_menu(stdscr):
     """
